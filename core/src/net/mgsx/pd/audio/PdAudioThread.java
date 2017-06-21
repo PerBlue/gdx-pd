@@ -86,6 +86,7 @@ public class PdAudioThread extends Thread implements Disposable
 			device.writeSamples(outBuffer, 0, outBuffer.length);
 			
 			if(requirePolling){
+				requirePolling = false;
 				Gdx.app.postRunnable(pollRunnable);
 			}
 		}
