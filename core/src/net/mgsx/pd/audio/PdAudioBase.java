@@ -25,14 +25,12 @@ import net.mgsx.pd.utils.PdRuntimeException;
 abstract public class PdAudioBase implements PdAudio
 {
 	final private ObjectMap<String, Array<PdListener>> listeners = new ObjectMap<String, Array<PdListener>>();
-	
-	private PdAudioThread thread;
-	
-	private PdConfiguration config;
-	
+
+	protected PdConfiguration config;
+
 	public void create(PdConfiguration config){
 		this.config = config;
-		
+
 		PdBase.setReceiver(new PdReceiver(){
 
 			private final static String printTag = "gdx-pd-print";
@@ -97,34 +95,26 @@ abstract public class PdAudioBase implements PdAudio
 					System.out.println("pd " + s);
 				}
 			}
-			
+
 		});
-		
-		thread = createThread(config);
-		thread.start();
-		
+
 	}
-	
-	protected PdAudioThread createThread(PdConfiguration config)
-	{
-		return new PdAudioThread(config);
-	}
-	
+
+	@Override
 	public void release()
 	{
-		if(thread != null){
-			thread.dispose();
-			thread = null;
-		}
+		pause();
 		listeners.clear();
 		PdBase.setReceiver(null);
+		PdBase.closeAudio();
+		PdBase.release();
 	}
-	
+
 	@Override
 	public void dispose() {
 		release();
 	}
-	
+
 	@Override
 	public void addListener(String source, PdListener listener) {
 		Array<PdListener> contextualListeners = listeners.get(source);
@@ -145,7 +135,8 @@ abstract public class PdAudioBase implements PdAudio
 			}
 		}
 	}
-	
+
+	@Override
 	public PdPatch open(FileHandle file)
 	{
 		try {
@@ -155,72 +146,62 @@ abstract public class PdAudioBase implements PdAudio
 			throw new PdRuntimeException("unable to open patch", e);
 		}
 	}
-	
+
 	@Override
 	public void close(PdPatch patch) {
 		PdBase.closePatch(patch.getPdHandle());
 	}
-	
-	  public void sendBang(String recv){
-		  checkError(PdBase.sendBang(recv));
-	  }
 
-	  public void sendFloat(String recv, float x){
-		  checkError(PdBase.sendFloat(recv, x));
-	  }
-
-	  public void sendSymbol(String recv, String sym){
-		  checkError(PdBase.sendSymbol(recv, sym));
-	  }
-	  
-	  public void sendList(String recv, Object... args) {
-		  checkError(PdBase.sendList(recv, args));
-	  }
-
-	  public void sendMessage(String recv, String msg, Object... args) {
-		  checkError(PdBase.sendMessage(recv, msg, args));
-	  }
-	  
-	  public int arraySize(String name){
-		  int size = PdBase.arraySize(name);
-		  if(size < 0){
-			  throw new PdRuntimeException(size);
-		  }
-		  return size;
-	  }
-
-	  public void readArray(float[] destination, int destOffset, String source, int srcOffset,
-	      int n) {
-		  checkError(PdBase.readArray(destination, destOffset, source, srcOffset, n));
-	  }
-
-	  public void writeArray(String destination, int destOffset, float[] source, int srcOffset,
-	      int n) {
-		  checkError(PdBase.writeArray(destination, destOffset, source, srcOffset, n));
-	  }
-	  
-	  protected void checkError(int code){
-		  if(PdConfiguration.safe && code != 0){
-			  throw new PdRuntimeException(code);
-		  }
-	  }
-	  
 	@Override
-	public void pause() {
-		thread.dispose();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// silently fail.
-		}
-		thread = null;
+	public void sendBang(String recv){
+		checkError(PdBase.sendBang(recv));
 	}
-	
+
 	@Override
-	public void resume() {
-		if(thread == null){
-			thread = createThread(config);
-			thread.start();
+	public void sendFloat(String recv, float x){
+		checkError(PdBase.sendFloat(recv, x));
+	}
+
+	@Override
+	public void sendSymbol(String recv, String sym){
+		checkError(PdBase.sendSymbol(recv, sym));
+	}
+
+	@Override
+	public void sendList(String recv, Object... args) {
+		checkError(PdBase.sendList(recv, args));
+	}
+
+	@Override
+	public void sendMessage(String recv, String msg, Object... args) {
+		checkError(PdBase.sendMessage(recv, msg, args));
+	}
+
+	@Override
+	public int arraySize(String name){
+		int size = PdBase.arraySize(name);
+		if(size < 0){
+			throw new PdRuntimeException(size);
+		}
+		return size;
+	}
+
+	@Override
+	public void readArray(float[] destination, int destOffset, String source, int srcOffset,
+			int n) {
+		checkError(PdBase.readArray(destination, destOffset, source, srcOffset, n));
+	}
+
+	@Override
+	public void writeArray(String destination, int destOffset, float[] source, int srcOffset,
+			int n) {
+		checkError(PdBase.writeArray(destination, destOffset, source, srcOffset, n));
+	}
+
+	protected void checkError(int code){
+		if(PdConfiguration.safe && code != 0){
+			throw new PdRuntimeException(code);
 		}
 	}
+
 }

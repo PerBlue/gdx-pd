@@ -40,10 +40,38 @@ public class PdAudioOpenAL extends PdAudioBase
 
 	}
 	
+	private PdAudioThread thread;
+	
 	@Override
+	public void create(PdConfiguration config) {
+		super.create(config);
+		
+		thread = createThread(config);
+		thread.start();
+	}
+	
 	protected PdAudioThread createThread(PdConfiguration config) 
 	{
 		return new PdAudioThreadOpenAL(config);
+	}
+	
+	@Override
+	public void pause() {
+		thread.dispose();
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// silently fail.
+		}
+		thread = null;
+	}
+
+	@Override
+	public void resume() {
+		if(thread == null){
+			thread = createThread(config);
+			thread.start();
+		}
 	}
 
 }
