@@ -1,0 +1,30 @@
+sourceCompatibility = 1.7
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+eclipse.project {
+	name = appName + "-ios"
+}
+
+task androidJar(type: Jar) {
+    baseName "publishing-android"
+    from sourceSets.main.output
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        desktop(MavenPublication) {
+            groupId groupName
+            artifactId "$appName-backend-robovm"
+            from components.java
+            artifact sourceJar {
+                classifier "sources"
+            }
+            
+        }
+    }
+}

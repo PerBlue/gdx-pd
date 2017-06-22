@@ -32,19 +32,16 @@ public class PdAudioAndroid extends PdAudioBase
 	};
 	
 	private final Context context;
-	private final PdConfiguration pdConfig;
 	
 	public PdAudioAndroid() {
 		super();
 		this.context = ((AndroidApplicationBase)Gdx.app).getContext();
 		
-		pdConfig = getSuggestedConfigs();
-		
 		//TODO make this configurable
 		FileHelper.trimCache(context);
 	}
 
-	private PdConfiguration getSuggestedConfigs() {
+	public PdConfiguration getSuggestedConfigs() {
 		AudioParameters.init(context);
 		PdConfiguration config = new PdConfiguration();
 		config.sampleRate = AudioParameters.suggestSampleRate();
@@ -52,10 +49,6 @@ public class PdAudioAndroid extends PdAudioBase
 		config.outputChannels = AudioParameters.suggestOutputChannels();
 		config.bufferSize = AudioParameters.suggestOutputBufferSize(config.sampleRate);
 		return config;
-	}
-	
-	public PdConfiguration getConfiguration() {
-		return pdConfig;
 	}
 	
 	@Override

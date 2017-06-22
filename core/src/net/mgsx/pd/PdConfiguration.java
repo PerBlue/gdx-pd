@@ -48,6 +48,7 @@ public class PdConfiguration
 	 * input channels. Supported values are : 
 	 * 0 (no input), 1 (mono microphone), 2 (stereo microphone).
 	 * Default is 0 (no inputs) since microphone usage is not so usual and consume CPU.
+	 * For iOS implementation, setting this to > 0 will enable input, but the number of channels will come from outputChannels.
 	 */
 	public int inputChannels = 0;
 	
@@ -86,5 +87,12 @@ public class PdConfiguration
 	 * This value can be increased to avoid glitches or free CPU usage.
 	 */
 	public int bufferCount = 8;
+	
+	/**
+	 * Only used by iOS implementation.
+	 * Specifying mixingEnabled = true will allow the app to continue
+	 * playing audio along with other apps (such as iPod music player).
+	 */
+	public boolean mixingEnabled = true;
 	
 }

@@ -91,6 +91,12 @@ public class Pd
 				Class<? extends PdAudio> cls = ClassReflection.forName(className);
 				audio = ClassReflection.newInstance(cls);
 			}
+			else if(type == ApplicationType.iOS)
+			{
+				String className = "net.mgsx.pd.PdAudioiOS";
+				Class<? extends PdAudio> cls = ClassReflection.forName(className);
+				audio = ClassReflection.newInstance(cls);
+			}
 			else
 			{
 				audio = new PdAudioNone();
