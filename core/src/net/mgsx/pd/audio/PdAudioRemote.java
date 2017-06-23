@@ -334,4 +334,9 @@ public class PdAudioRemote implements PdAudio
 		Gdx.app.error("PdAudioRemote", "resume has no effect in remote mode");
 	}
 
+	@Override
+	public PdConfiguration getSuggestedConfigs() {
+		return new PdConfiguration();
+	}
+
 }

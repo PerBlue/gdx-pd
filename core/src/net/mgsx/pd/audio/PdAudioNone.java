@@ -84,4 +84,9 @@ public class PdAudioNone implements PdAudio
 	@Override
 	public void resume() {
 	}
+
+	@Override
+	public PdConfiguration getSuggestedConfigs() {
+		return new PdConfiguration();
+	}
 }

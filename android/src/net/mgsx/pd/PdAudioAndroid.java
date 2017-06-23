@@ -41,6 +41,7 @@ public class PdAudioAndroid extends PdAudioBase
 		FileHelper.trimCache(context);
 	}
 
+	@Override
 	public PdConfiguration getSuggestedConfigs() {
 		AudioParameters.init(context);
 		PdConfiguration config = new PdConfiguration();

@@ -27,7 +27,13 @@ abstract public class PdAudioBase implements PdAudio
 	final private ObjectMap<String, Array<PdListener>> listeners = new ObjectMap<String, Array<PdListener>>();
 
 	protected PdConfiguration config;
+	
+	@Override
+	public PdConfiguration getSuggestedConfigs() {
+		return new PdConfiguration();
+	}
 
+	@Override
 	public void create(PdConfiguration config){
 		this.config = config;
 
