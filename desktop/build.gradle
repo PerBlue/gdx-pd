@@ -25,7 +25,6 @@ publishing {
             groupId groupName
             artifactId "$appName-backend-desktop"
             artifact desktopJar {
-                classifier "desktop"
             }
             artifact sourceJar {
                 classifier "sources"
