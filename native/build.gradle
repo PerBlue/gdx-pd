@@ -96,6 +96,14 @@ def libpdJniSources = copySpec {
 	into "libpdbinding-sources"
 }
 
+def libpdOpenSLSources = copySpec {
+	from("../libpd/jni"){
+		include "z_jni_opensl.c",
+				"opensl_stream/opensl_stream.c"
+	}
+	into "libpdopensl-sources"
+}
+
 task generateJniClasses(type:Exec) {
     def classpath = "$projectDir/../libpd/java"
     commandLine "javac", "-classpath", classpath, "$projectDir/../libpd/java/org/puredata/core/PdBase.java"
@@ -122,7 +130,8 @@ task importSources(type: Copy, dependsOn: [generateJniHeaders]) {
 	with pdExtraSources
 	with extraSources
 	with libpdSources
-	with libpdJniSources
+	//with libpdJniSources //use opensl version instead
+	with libpdOpenSLSources
 	into "jni/pd"
 	
 	doLast {
@@ -194,6 +203,8 @@ task generateBuildScripts(dependsOn: [importSources]){
 			it.cFlags += " -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast"
 			it.libraries += " -ldl";
 			it.headerDirs += headerDirs
+			it.headerDirs += ["../../libpd/jni/opensl_stream"]
+			it.linkerFlags += " -lOpenSLES -llog"
 		}
 		
 		// TODO IOS
