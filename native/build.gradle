@@ -312,24 +312,24 @@ publishing {
     publications {
         natives(MavenPublication) {
             groupId groupName
-            artifactId "$appName-platform"
+            artifactId "$appName-natives"
             artifact desktopJar {
-                classifier "natives-desktop"
+                classifier "desktop"
             }
             artifact androidArmJar {
-                classifier "natives-armeabi"
+                classifier "armeabi"
             }
             artifact androidArm7Jar {
-                classifier "natives-armeabi-v7a"
+                classifier "armeabi-v7a"
             }
             artifact androidArm8Jar {
-                classifier "natives-arm64-v8a"
+                classifier "arm64-v8a"
             }
             artifact android32Jar {
-                classifier "natives-x86"
+                classifier "x86"
             }
             artifact android64Jar {
-                classifier "natives-x86_64"
+                classifier "x86_64"
             }
         }
     }

@@ -23,7 +23,7 @@ publishing {
     publications {
         desktop(MavenPublication) {
             groupId groupName
-            artifactId "$appName-platform"
+            artifactId "$appName-backend-desktop"
             artifact desktopJar {
                 classifier "desktop"
             }
