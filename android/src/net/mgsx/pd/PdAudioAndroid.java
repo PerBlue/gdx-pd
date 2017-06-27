@@ -60,22 +60,26 @@ public class PdAudioAndroid extends PdAudioBase
 	
 	@Override
 	public void pause() {
-		PdBase.pauseAudio();
-		handler.removeCallbacks(pollRunner);
-		handler.post(new Runnable() {
-			@Override
-			public void run() {
-				PdBase.pollMidiQueue();  // Flush pending messages.
-				PdBase.pollPdMessageQueue();
-			}
-		});
+		if(PdBase.isRunning()) {
+			PdBase.pauseAudio();
+			handler.removeCallbacks(pollRunner);
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					PdBase.pollMidiQueue();  // Flush pending messages.
+					PdBase.pollPdMessageQueue();
+				}
+			});
+		}
 	}
 	
 	@Override
 	public void resume() {
-		PdBase.computeAudio(true);
-		handler.post(pollRunner);
-		PdBase.startAudio();
+		if(!PdBase.isRunning()) {
+			PdBase.computeAudio(true);
+			handler.post(pollRunner);
+			PdBase.startAudio();
+		}
 	}
 	
 	@Override
