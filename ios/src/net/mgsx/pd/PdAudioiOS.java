@@ -16,6 +16,7 @@
 
 package net.mgsx.pd;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,7 +103,8 @@ public class PdAudioiOS extends PdAudioBase {
 	
 	@Override
 	public PdPatch open(FileHandle file) {
-		VoidPtr pointer = PdBase.openFile(new NSString(file.name()), new NSString(file.parent().path()));
+		File f = file.file();
+		VoidPtr pointer = PdBase.openFile(new NSString(f.getName()), new NSString(f.getParent()));
 		if(pointer == null) {
 			throw new PdRuntimeException("Failed to open patch");
 		}
