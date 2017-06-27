@@ -57,13 +57,15 @@ public class PdAudioOpenAL extends PdAudioBase
 	
 	@Override
 	public void pause() {
-		thread.dispose();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// silently fail.
+		if(thread != null){
+			thread.dispose();
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				// silently fail.
+			}
+			thread = null;
 		}
-		thread = null;
 	}
 
 	@Override
