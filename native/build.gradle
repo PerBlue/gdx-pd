@@ -130,7 +130,7 @@ task importSources(type: Copy, dependsOn: [generateJniHeaders]) {
 	with pdExtraSources
 	with extraSources
 	with libpdSources
-	//with libpdJniSources //use opensl version instead
+	with libpdJniSources
 	with libpdOpenSLSources
 	into "jni/pd"
 	
@@ -173,6 +173,7 @@ task generateBuildScripts(dependsOn: [importSources]){
 			it.cFlags += " -DPD -DHAVE_UNISTD_H -DUSEAPI_DUMMY -O3 -DLIBPD_SETLOCALE";
 			it.libraries += " -lm -lpthread";
 			it.headerDirs += headerDirs
+			it.cExcludes += ["**/libpdopensl-sources/**/*.*"]
 		}
 
 		[linux64, linux32].each {
@@ -205,6 +206,7 @@ task generateBuildScripts(dependsOn: [importSources]){
 			it.headerDirs += headerDirs
 			it.headerDirs += ["../../libpd/jni/opensl_stream"]
 			it.linkerFlags += " -lOpenSLES -llog"
+			it.cExcludes += ["**/libpdbinding-sources/**/*.*", "**/target/**/*.*"]
 		}
 		
 		// TODO IOS
@@ -226,46 +228,39 @@ task generateBuildScripts(dependsOn: [importSources]){
 
 // TODO use gradle ant (ant.echo)
 
-task buildLinux64(dependsOn: generateBuildScripts){
-	doLast{
-		BuildExecutor.executeAnt("$projectDir/jni/build-linux64.xml", "-v -Dhas-compiler=true clean postcompile");
-	}
+task buildLinux64(type:Exec, dependsOn: generateBuildScripts){
+	executable 'ant'
+	args = ['-f', "$projectDir/jni/build-linux64.xml", '-v', '-Dhas-compiler=true', 'clean', 'postcompile']
 }
 
-task buildLinux32(dependsOn: generateBuildScripts){
-	doLast{
-		BuildExecutor.executeAnt("$projectDir/jni/build-linux32.xml", "-v -Dhas-compiler=true clean postcompile");
-	}
+task buildLinux32(type:Exec, dependsOn: generateBuildScripts){
+	executable 'ant'
+	args = ['-f', "$projectDir/jni/build-linux32.xml", '-v', '-Dhas-compiler=true', 'clean', 'postcompile']
 }
 
-task buildWindows64(dependsOn: generateBuildScripts){
-	doLast{
-		BuildExecutor.executeAnt("$projectDir/jni/build-windows64.xml", "-v -Dhas-compiler=true clean postcompile");
-	}
+task buildWindows64(type:Exec, dependsOn: generateBuildScripts){
+	executable 'ant'
+	args = ['-f', "$projectDir/jni/build-windows64.xml", '-v', '-Dhas-compiler=true', 'clean', 'postcompile']
 }
 
-task buildWindows32(dependsOn: generateBuildScripts){
-	doLast{
-		BuildExecutor.executeAnt("$projectDir/jni/build-windows32.xml", "-v -Dhas-compiler=true clean postcompile");
-	}
+task buildWindows32(type:Exec, dependsOn: generateBuildScripts){
+	executable 'ant'
+	args = ['-f', "$projectDir/jni/build-windows32.xml", '-v', '-Dhas-compiler=true', 'clean', 'postcompile']
 }
 
-task buildMacOSX64(dependsOn: generateBuildScripts){
-	doLast{
-		BuildExecutor.executeAnt("$projectDir/jni/build-macosx64.xml", "-v -Dhas-compiler=true clean postcompile");
-	}
+task buildMacOSX64(type:Exec, dependsOn: generateBuildScripts){
+	executable 'ant'
+	args = ['-f', "$projectDir/jni/build-macosx64.xml", '-v', '-Dhas-compiler=true', 'clean', 'postcompile']
 }
 
-task buildMacOSX32(dependsOn: generateBuildScripts){
-	doLast{
-		BuildExecutor.executeAnt("$projectDir/jni/build-macosx32.xml", "-v -Dhas-compiler=true clean postcompile");
-	}
+task buildMacOSX32(type:Exec, dependsOn: generateBuildScripts){
+	executable 'ant'
+	args = ['-f', "$projectDir/jni/build-macosx32.xml", '-v', '-Dhas-compiler=true', 'clean', 'postcompile']
 }
 
-task buildAndroid(dependsOn: generateBuildScripts){
-	doLast{
-		BuildExecutor.executeAnt("$projectDir/jni/build-android32.xml", "-v -Dhas-compiler=true clean postcompile");
-	}
+task buildAndroid(type:Exec, dependsOn: generateBuildScripts){
+	executable 'ant'
+	args = ['-f', "$projectDir/jni/build-android32.xml", '-v', '-Dhas-compiler=true', 'clean', 'postcompile']
 }
 
 task buildNativeMac(dependsOn: [buildMacOSX64, buildMacOSX32]){
