@@ -104,6 +104,51 @@ def libpdOpenSLSources = copySpec {
 	into "libpdopensl-sources"
 }
 
+def pdoggSources = copySpec {
+	from("../libpd/pdogg-0.25.1"){
+		include "oggamp~.c", "oggcast~.c", "oggread~.c", "oggwrite~.c", "pdogg.c"
+	}
+	into "pdogg-sources"
+}
+
+def liboggSources = copySpec {
+	from("../libpd/libogg-1.3.2/src"){
+		include "bitwise.c", "framing.c"
+	}
+	into "libogg-sources"
+}
+
+def libvorbisSources = copySpec {
+	from("../libpd/libvorbis-1.3.5/lib"){
+		include "analysis.c",
+				"barkmel.c",
+				"bitrate.c",
+				"block.c",
+				"codebook.c",
+				"envelope.c",
+				"floor0.c",
+				"floor1.c",
+				"info.c",
+				"lookup.c",
+				"lpc.c",
+				"lsp.c",
+				"mapping0.c",
+				"mdct.c",
+				"psy.c",
+				"psytune.c",
+				"registry.c",
+				"res0.c",
+				"sharedbook.c",
+				"smallft.c",
+				"synthesis.c",
+				"tone.c",
+				"vorbisenc.c",
+				"vorbisfile.c",
+				"window.c"
+	}
+	into "libvorbis-sources"
+}
+
 task generateJniClasses(type:Exec) {
     def classpath = "$projectDir/../libpd/java"
     commandLine "javac", "-classpath", classpath, "$projectDir/../libpd/java/org/puredata/core/PdBase.java"
@@ -132,6 +177,9 @@ task importSources(type: Copy, dependsOn: [generateJniHeaders]) {
 	with libpdSources
 	with libpdJniSources
 	with libpdOpenSLSources
+	with pdoggSources
+	with liboggSources
+	with libvorbisSources
 	into "jni/pd"
 	
 	doLast {
@@ -151,7 +199,10 @@ task generateBuildScripts(dependsOn: [importSources]){
 				"extra",
 				"../../libpd/libpd_wrapper",
 				"../../libpd/jni",
-				"../../libpd/libpd_wrapper/util"]
+				"../../libpd/libpd_wrapper/util",
+				"../../libpd/libogg-1.3.2/include/ogg",
+				"../../libpd/libvorbis-1.3.5/include/vorbis",
+				"../../libpd/libvorbis-1.3.5/lib"]
 		
 	
 		def linux64 = BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Linux, true);
