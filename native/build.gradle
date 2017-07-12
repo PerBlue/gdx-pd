@@ -200,8 +200,8 @@ task generateBuildScripts(dependsOn: [importSources]){
 				"../../libpd/libpd_wrapper",
 				"../../libpd/jni",
 				"../../libpd/libpd_wrapper/util",
-				"../../libpd/libogg-1.3.2/include/ogg",
-				"../../libpd/libvorbis-1.3.5/include/vorbis",
+				"../../libpd/libogg-1.3.2/include",
+				"../../libpd/libvorbis-1.3.5/include",
 				"../../libpd/libvorbis-1.3.5/lib"]
 		
 	
