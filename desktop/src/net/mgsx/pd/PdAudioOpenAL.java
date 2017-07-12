@@ -1,12 +1,20 @@
 package net.mgsx.pd;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.puredata.core.PdBase;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.backends.lwjgl.audio.OpenALAudio;
 import com.badlogic.gdx.backends.lwjgl.audio.OpenALAudioDevice;
+import com.badlogic.gdx.files.FileHandle;
 
 import net.mgsx.pd.audio.PdAudioBase;
 import net.mgsx.pd.audio.PdAudioThread;
+import net.mgsx.pd.patch.PdPatch;
+import net.mgsx.pd.utils.PdRuntimeException;
 
 /**
  * Pd Audio desktop implementation.
@@ -73,6 +81,26 @@ public class PdAudioOpenAL extends PdAudioBase
 		if(thread == null){
 			thread = createThread(config);
 			thread.start();
+		}
+	}
+	
+	@Override
+	public PdPatch open(FileHandle file) {
+		File cachePatchFile;
+		if(file.file().exists()) {
+			cachePatchFile = file.file();
+		}
+		else {
+			cachePatchFile = new File(System.getProperty("java.io.tmpdir"), file.path());
+			FileHandle cacheDir = Gdx.files.absolute(cachePatchFile.getParent());
+			
+			FileUtils.copyPatchFolder(file, cacheDir);
+		}
+		try {
+			int handle = PdBase.openPatch(cachePatchFile);
+			return new PdPatch(handle);
+		} catch (IOException e) {
+			throw new PdRuntimeException("unable to open patch", e);
 		}
 	}
 

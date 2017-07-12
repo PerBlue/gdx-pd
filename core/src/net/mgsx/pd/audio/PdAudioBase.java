@@ -1,14 +1,9 @@
 package net.mgsx.pd.audio;
 
-import java.io.IOException;
-
-import org.puredata.core.PdBase;
-import org.puredata.core.PdListener;
-import org.puredata.core.PdReceiver;
+import org.puredata.core.*;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -139,17 +134,6 @@ abstract public class PdAudioBase implements PdAudio
 				PdBase.unsubscribe(source);
 				listeners.remove(source);
 			}
-		}
-	}
-
-	@Override
-	public PdPatch open(FileHandle file)
-	{
-		try {
-			int handle = PdBase.openPatch(file.path());
-			return new PdPatch(handle);
-		} catch (IOException e) {
-			throw new PdRuntimeException("unable to open patch", e);
 		}
 	}
 
