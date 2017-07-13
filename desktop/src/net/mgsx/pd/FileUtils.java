@@ -16,6 +16,9 @@ public class FileUtils {
 	public static void copyPatchFolder(FileHandle patchFile, FileHandle destDir) {
 		File codeFile = new File(Gdx.app.getApplicationListener().getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 		if(codeFile.getName().endsWith(".jar")) {
+			if(!ensureDirectoryExists(destDir.file())) {
+				throw new IOException("Could not create directory: " + destDir.file().getAbsolutePath());
+			}
 			String sourceDir = patchFile.parent().path();
 			JarFile jarFile = null;
 			try {
