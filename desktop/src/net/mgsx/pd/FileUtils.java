@@ -83,7 +83,7 @@ public class FileUtils {
 	}
 	
 	private static boolean ensureDirectoryExists(File f) {
-		return f.exists() || f.mkdir();
+		return f.exists() || f.mkdirs();
 	}
 
 }
