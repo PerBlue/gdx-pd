@@ -141,6 +141,20 @@ def libvorbisSources = copySpec {
 	into "libvorbis-sources"
 }
 
+def ggeeSources = copySpec {
+	from("../libpd/ggee-0.26"){
+		include "control/constant.c", "control/rl.c", "control/serial_ms.c", "control/sl.c", "control/getdir.c", "control/rtout.c", 
+		"control/serial_mt.c", "control/stripdir.c", "control/inv.c", "control/serial_bird.c", "control/shell.c", "control/unserialize.c", 
+		"control/qread.c", "control/serialize.c", "control/sinh.c", "control/unwonk.c", "experimental/fofsynth~.c", "experimental/tabwrite4~.c", 
+		"experimental/pvocfreq.c", "filters/bandpass.c", "filters/highpass.c", "filters/hlshelf.c", "filters/lowshelf.c", "filters/notch.c", 
+		"filters/equalizer.c", "filters/highshelf.c", "filters/lowpass.c", "filters/moog~.c", "gui/button.c", "gui/fatom.c", "gui/image.c", 
+		"gui/sliderh.c", "gui/ticker.c", "gui/envgen.c", "gui/gcanvas.c", "gui/slider.c", "gui/state.c", "gui/toddle.c", "signal/atan2~.c", 
+		"signal/mixer~.c", "signal/sfwrite~.c", "signal/streamin~.c", "signal/streamout~.c",
+		"ggee.c"
+	}
+	into "ggee-sources"
+}
+
 task generateJniClasses(type:Exec) {
     def classpath = "$projectDir/../libpd/java"
     commandLine "javac", "-classpath", classpath, "$projectDir/../libpd/java/org/puredata/core/PdBase.java"
@@ -172,6 +186,7 @@ task importSources(type: Copy, dependsOn: [generateJniHeaders]) {
 	with pdoggSources
 	with liboggSources
 	with libvorbisSources
+	with ggeeSources
 	into "jni/pd"
 	
 	doLast {
@@ -198,7 +213,10 @@ task generateBuildScripts(dependsOn: [importSources]){
 				"../../libpd/libvorbis-1.3.5/lib/modes",
 				"../../libpd/libvorbis-1.3.5/lib/books/coupled",
 				"../../libpd/libvorbis-1.3.5/lib/books/floor",
-				"../../libpd/libvorbis-1.3.5/lib/books/uncoupled"]
+				"../../libpd/libvorbis-1.3.5/lib/books/uncoupled",
+				"../../libpd/ggee-0.26/filters",
+				"../../libpd/ggee-0.26/gui",
+				"../../libpd/ggee-0.26/signal"]
 		
 	
 		def linux64 = BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Linux, true);
