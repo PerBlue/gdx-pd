@@ -143,7 +143,7 @@ def libvorbisSources = copySpec {
 
 def ggeeSources = copySpec {
 	from("../libpd/ggee-0.26"){
-		include "control/constant.c", "control/rl.c", "control/serial_ms.c", "control/sl.c", "control/getdir.c", "control/rtout.c", 
+		include "control/constant.c", "control/rl.c", "control/serial_ms.c", "control/sl.c", "control/getdir.c", 
 		"control/serial_mt.c", "control/stripdir.c", "control/inv.c", "control/serial_bird.c", "control/shell.c", "control/unserialize.c", 
 		"control/qread.c", "control/serialize.c", "control/sinh.c", "control/unwonk.c", "experimental/fofsynth~.c", "experimental/tabwrite4~.c", 
 		"experimental/pvocfreq.c", "filters/bandpass.c", "filters/highpass.c", "filters/hlshelf.c", "filters/lowshelf.c", "filters/notch.c", 
