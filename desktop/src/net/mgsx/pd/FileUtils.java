@@ -1,6 +1,7 @@
 package net.mgsx.pd;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -14,8 +15,8 @@ import net.mgsx.pd.utils.PdRuntimeException;
 public class FileUtils {
 	
 	public static void copyPatchFolder(FileHandle patchFile, FileHandle destDir) {
-		File codeFile = new File(Gdx.app.getApplicationListener().getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
-		if(codeFile.getName().endsWith(".jar")) {
+		String escapedCodeFileName = Gdx.app.getApplicationListener().getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+		if(escapedCodeFileName.endsWith(".jar")) {
 			String sourceDir = patchFile.parent().path();
 			JarFile jarFile = null;
 			try {
@@ -23,7 +24,7 @@ public class FileUtils {
 					throw new IOException("Could not create directory: " + destDir.file().getAbsolutePath());
 				}
 				
-				jarFile = new JarFile(codeFile);
+				jarFile = new JarFile(URLDecoder.decode(escapedCodeFileName, "UTF-8"));
 				Enumeration<? extends ZipEntry> e = jarFile.entries();
 				while(e.hasMoreElements()) {
 					ZipEntry entry = e.nextElement();
