@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.badlogicgames.gdx:gdx-jnigen:1.9.4'
+        classpath "$gdxSource:gdx-jnigen:$gdxVersion"
     }
 }
 

@@ -27,8 +27,8 @@ project(":desktop") {
 
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "$gdxSource:gdx-platform:$gdxVersion:natives-desktop"
+        compile "$gdxSource:gdx-backend-lwjgl:$gdxVersion"
     }
 }
 
@@ -38,7 +38,7 @@ project(":android") {
 
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        compile "$gdxSource:gdx-backend-android:$gdxVersion"
     }
 }
 
@@ -47,7 +47,7 @@ project(":core") {
 
 
     dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "$gdxSource:gdx:$gdxVersion"
 		compile "com.illposed.osc:javaosc-core:$oscVersion"
         testCompile 'junit:junit:4.12'
     }
@@ -65,7 +65,7 @@ project(":ios") {
 		compile project(":core")
 		compile "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
 		compile "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
-		compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+		compile "$gdxSource:gdx-backend-robovm:$gdxVersion"
 	}
 
 }

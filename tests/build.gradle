@@ -30,8 +30,8 @@ project(":desktop") {
 
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "$gdxSource:gdx-backend-lwjgl:$gdxVersion"
+        compile "$gdxSource:gdx-platform:$gdxVersion:natives-desktop"
         
         compile "net.mgsx.gdx:gdx-pd-platform:$pdVersion:desktop"
         compile "net.mgsx.gdx:gdx-pd-platform:$pdVersion:natives-desktop"
@@ -51,12 +51,12 @@ project(":android") {
 
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+        compile "$gdxSource:gdx-backend-android:$gdxVersion"
+        natives "$gdxSource:gdx-platform:$gdxVersion:natives-armeabi"
+        natives "$gdxSource:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "$gdxSource:gdx-platform:$gdxVersion:natives-arm64-v8a"
+        natives "$gdxSource:gdx-platform:$gdxVersion:natives-x86"
+        natives "$gdxSource:gdx-platform:$gdxVersion:natives-x86_64"
         
         compile "net.mgsx.gdx:gdx-pd-backend-android:$pdVersion"
         natives "net.mgsx.gdx:gdx-pd-platform:$pdVersion:natives-armeabi"
@@ -76,8 +76,8 @@ project(":ios") {
         compile project(":core")
         compile "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
         compile "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
-        compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+        compile "$gdxSource:gdx-backend-robovm:$gdxVersion"
+        compile "$gdxSource:gdx-platform:$gdxVersion:natives-ios"
     }
 }
 
@@ -88,9 +88,9 @@ project(":html") {
 
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+        compile "$gdxSource:gdx-backend-gwt:$gdxVersion"
+        compile "$gdxSource:gdx:$gdxVersion:sources"
+        compile "$gdxSource:gdx-backend-gwt:$gdxVersion:sources"
     }
 }
 
@@ -100,7 +100,7 @@ project(":core") {
 	sourceCompatibility = 1.6
 
     dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "$gdxSource:gdx:$gdxVersion"
         compile "net.mgsx.gdx:gdx-pd:$pdVersion"
     }
 }

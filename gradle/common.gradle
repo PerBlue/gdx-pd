@@ -4,6 +4,7 @@ allprojects {
 
     version = '0.8.0-SNAPSHOT'
     ext {
+    	gdxSource = 'com.badlogicgames.gdx'
         gdxVersion = '1.9.6'
         roboVMVersion = '2.2.0'
         groupName = "net.mgsx.gdx"
