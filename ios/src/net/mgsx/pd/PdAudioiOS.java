@@ -53,11 +53,11 @@ public class PdAudioiOS extends PdAudioBase {
 		
 		audioController = new PdAudioController();
 		if(config.inputChannels <= 0) {
-			if(audioController.configureAmbientWithSampleRate(config.sampleRate, config.outputChannels, config.mixingEnabled) != PdAudioStatus.PdAudioOK)
+			if(audioController.configureAmbientWithSampleRate(config.sampleRate, config.outputChannels, config.mixingEnabled) == PdAudioStatus.PdAudioError)
 				throw new PdRuntimeException("Failed to initialize audio components!");
 		}
 		else {
-			if(audioController.configurePlaybackWithSampleRate(config.sampleRate, config.outputChannels, true, config.mixingEnabled) != PdAudioStatus.PdAudioOK) {
+			if(audioController.configurePlaybackWithSampleRate(config.sampleRate, config.outputChannels, true, config.mixingEnabled) == PdAudioStatus.PdAudioError) {
 				throw new PdRuntimeException("Failed to initialize audio components!");
 			}
 		}
