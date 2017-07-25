@@ -218,7 +218,7 @@ public class PdAudioiOS extends PdAudioBase {
 		checkError(res);
 	}
 	
-	private static class ForwardingListener extends NSObject implements net.mgsx.pd.bindings.PdListener {
+	private static class ForwardingListener extends net.mgsx.pd.bindings.PdListener.Adapter {
 		
 		private final PdListener javaListener;
 		

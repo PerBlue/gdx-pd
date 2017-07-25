@@ -17,9 +17,7 @@
 package net.mgsx.pd.bindings;
 
 import org.robovm.apple.foundation.*;
-import org.robovm.objc.Selector;
-import org.robovm.objc.annotation.BindSelector;
-import org.robovm.rt.bro.annotation.Callback;
+import org.robovm.objc.annotation.Method;
 import org.robovm.rt.bro.annotation.Library;
 
 /**
@@ -57,37 +55,28 @@ public interface PdListener extends NSObjectProtocol {
 	 */
 	public void receiveMessage(NSString message, NSArray<?> arguments, NSString source);
 	
-	static class Callbacks {
+	public static class Adapter extends NSObject implements PdListener {
+
+		@Override
+		@Method(selector = "receiveBangFromSource:")
+		public void receiveBangFromSource(NSString source) {}
+
+		@Override
+		@Method(selector = "receiveFloat:fromSource:")
+		public void receiveFloat(float received, NSString source) {}
+
+		@Override
+		@Method(selector = "receiveSymbol:fromSource:")
+		public void receiveSymbol(NSString symbol, NSString source) {}
+
+		@Override
+		@Method(selector = "receiveList:fromSource:")
+		public void receiveList(NSArray<?> list, NSString source) {}
+
+		@Override
+		@Method(selector = "receiveMessage:withArguments:fromSource:")
+		public void receiveMessage(NSString message, NSArray<?> arguments, NSString source) {}
 		
-		@Callback
-        @BindSelector("receiveBangFromSource:")
-        public static void receiveBangFromSource(PdListener __self__, Selector __cmd__, NSString source){
-			__self__.receiveBangFromSource(source);
-			}
-		
-		@Callback
-        @BindSelector("receiveFloat:fromSource:")
-        public static void receiveFloat(PdListener __self__, Selector __cmd__, float received, NSString source){
-			__self__.receiveFloat(received, source);
-			}
-		
-		@Callback
-        @BindSelector("receiveSymbol:fromSource:")
-        public static void receiveSymbol(PdListener __self__, Selector __cmd__, NSString symbol, NSString source){
-			__self__.receiveSymbol(symbol, source);
-			}
-		
-		@Callback
-        @BindSelector("receiveList:fromSource:")
-        public static void receiveList(PdListener __self__, Selector __cmd__, NSArray<?> list, NSString source){
-			__self__.receiveList(list, source);
-			}
-		
-		@Callback
-        @BindSelector("receiveMessage:withArguments:fromSource:")
-        public static void receiveMessage(PdListener __self__, Selector __cmd__, NSString message, NSArray<?> arguments, NSString source){
-			__self__.receiveMessage(message, arguments, source);
-			}
-		
-		}
 	}
+	
+}
