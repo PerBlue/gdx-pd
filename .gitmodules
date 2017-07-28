@@ -6,4 +6,4 @@
 	url = https://github.com/rfabbri/pd-macambira.git
 [submodule "libsndfile"]
 	path = libsndfile
-	url = https://github.com/erikd/libsndfile.git
+	url = https://github.com/PerBlue/libsndfile.git
