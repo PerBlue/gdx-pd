@@ -155,6 +155,43 @@ def ggeeSources = copySpec {
 	into "ggee-sources"
 }
 
+def libsndfileSources = copySpec {
+	from("../libsndfile/src"){
+		include "common.c", "file_io.c", "command.c", "pcm.c", 
+			"ulaw.c", "alaw.c", "float32.c", "double64.c", "ima_adpcm.c", "ms_adpcm.c", 
+			"gsm610.c", "dwvw.c", "vox_adpcm.c", "interleave.c", "strings.c", "dither.c", 
+			"cart.c", "broadcast.c", "audio_detect.c", "ima_oki_adpcm.c", 
+			"alac.c", "chunk.c", "ogg.c", "chanmap.c", "windows.c", "id3.c", 
+			"sndfile.c", "aiff.c", "au.c", "avr.c", "caf.c", "dwd.c", "flac.c", "g72x.c", "htk.c", "ircam.c", 
+			"macos.c", "mat4.c", "mat5.c", "nist.c", "paf.c", "pvf.c", "raw.c", "rx2.c", "sd2.c", 
+			"sds.c", "svx.c", "txw.c", "voc.c", "wve.c", "w64.c", "wavlike.c", "wav.c", "xi.c", "mpc2k.c", "rf64.c", 
+			"ogg_vorbis.c", "ogg_speex.c", "ogg_pcm.c", "ogg_opus.c", 
+			"GSM610/add.c", "GSM610/code.c", "GSM610/decode.c", "GSM610/gsm_create.c", 
+			"GSM610/gsm_decode.c", "GSM610/gsm_destroy.c", "GSM610/gsm_encode.c", 
+			"GSM610/gsm_option.c", "GSM610/long_term.c", "GSM610/lpc.c", "GSM610/preprocess.c", 
+			"GSM610/rpe.c", "GSM610/short_term.c", "GSM610/table.c", 
+			"G72x/g721.c", "G72x/g723_16.c", "G72x/g723_24.c", "G72x/g723_40.c", "G72x/g72x.c", 
+			"ALAC/ALACBitUtilities.c", "ALAC/ag_dec.c", 
+			"ALAC/ag_enc.c", "ALAC/dp_dec.c", "ALAC/dp_enc.c", "ALAC/matrix_dec.c", 
+			"ALAC/matrix_enc.c", "ALAC/alac_decoder.c", "ALAC/alac_encoder.c"
+	}
+	into "libsndfile-sources"
+}
+
+def threadlibSources = copySpec {
+	from("../pd-macambira/externals/grh/threadlib/src"){
+		include "callbacks.c", "detach.c", "fifo.c", "join.c", "sleep.c", "threadlib.c"
+	}
+	into "threadlib-sources"
+}
+
+def sndfilerSources = copySpec {
+	from("../pd-macambira/externals/tb/sndfiler/src"){
+		include "file_input.c", "sndfiler.c"
+	}
+	into "sndfiler-sources"
+}
+
 task generateJniClasses(type:Exec) {
     def classpath = "$projectDir/../libpd/java"
     commandLine "javac", "-classpath", classpath, "$projectDir/../libpd/java/org/puredata/core/PdBase.java"
@@ -187,6 +224,9 @@ task importSources(type: Copy, dependsOn: [generateJniHeaders]) {
 	with liboggSources
 	with libvorbisSources
 	with ggeeSources
+	with libsndfileSources
+	with threadlibSources
+	with sndfilerSources
 	into "jni/pd"
 	
 	doLast {
@@ -216,7 +256,13 @@ task generateBuildScripts(dependsOn: [importSources]){
 				"../../libpd/libvorbis-1.3.5/lib/books/uncoupled",
 				"../../libpd/ggee-0.26/filters",
 				"../../libpd/ggee-0.26/gui",
-				"../../libpd/ggee-0.26/signal"]
+				"../../libpd/ggee-0.26/signal",
+				"../../libsndfile/src",
+				"../../libsndfile/src/ALAC",
+				"../../libsndfile/src/G72x",
+				"../../libsndfile/src/GSM610",
+				"../../pd-macambira/externals/grh/threadlib/src",
+				"../../pd-macambira/externals/tb/sndfiler/src"]
 		
 	
 		def linux64 = BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Linux, true);
