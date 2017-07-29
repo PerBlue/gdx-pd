@@ -3,7 +3,7 @@
 	url = https://github.com/PerBlue/libpd.git
 [submodule "pd-macambira"]
 	path = pd-macambira
-	url = https://github.com/rfabbri/pd-macambira.git
+	url = https://github.com/PerBlue/pd-macambira.git
 [submodule "libsndfile"]
 	path = libsndfile
 	url = https://github.com/PerBlue/libsndfile.git
