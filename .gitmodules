@@ -1,9 +1,12 @@
 [submodule "libpd"]
 	path = libpd
 	url = https://github.com/PerBlue/libpd.git
+	branch = master
 [submodule "pd-macambira"]
 	path = pd-macambira
 	url = https://github.com/PerBlue/pd-macambira.git
+	branch = master
 [submodule "libsndfile"]
 	path = libsndfile
 	url = https://github.com/PerBlue/libsndfile.git
+	branch = master
