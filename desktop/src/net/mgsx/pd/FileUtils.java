@@ -68,6 +68,9 @@ public class FileUtils {
 		}
 		else {
 			FileHandle patchParent = patchFile.parent();
+			if(destDir.isDirectory() && patchParent.name().equals(destDir.name())) {
+				destDir = destDir.parent();
+			}
 			if(patchParent.file().exists()) {
 				patchParent.copyTo(destDir);
 			}
