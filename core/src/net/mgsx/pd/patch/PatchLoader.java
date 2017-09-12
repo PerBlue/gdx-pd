@@ -14,33 +14,31 @@ import com.badlogic.gdx.utils.Array;
 import net.mgsx.pd.Pd;
 import net.mgsx.pd.utils.PdRuntimeException;
 
-public class PatchLoader extends AsynchronousAssetLoader<PdPatch, AssetLoaderParameters<PdPatch>>
+public class PatchLoader extends AsynchronousAssetLoader<PdPatch, PatchLoader.PdPatchParameter>
 {
 	private PdPatch patch;
-	private boolean asyncPatches;
+	private boolean defaultAsync;
 	private volatile int loadingPatch;
 	private volatile CountDownLatch loadingLatch;
 	
-	public PatchLoader(FileHandleResolver resolver, boolean enableAsync) {
+	public PatchLoader(FileHandleResolver resolver, boolean defaultAsync) {
 		super(resolver);
-		asyncPatches = enableAsync;
-		if(enableAsync) {
-			Pd.audio.addListener("patchLoaded", new PdListener.Adapter() {
-				@Override
-				public void receiveFloat(String source, float x) {
-					if(MathUtils.isEqual(loadingPatch, x)) {
-						loadingLatch.countDown();
-					}
+		this.defaultAsync = defaultAsync;
+		Pd.audio.addListener("patchLoaded", new PdListener.Adapter() {
+			@Override
+			public void receiveFloat(String source, float x) {
+				if(MathUtils.isEqual(loadingPatch, x)) {
+					loadingLatch.countDown();
 				}
-			});
-		}
+			}
+		});
 	}
 
 	@Override
 	public void loadAsync(AssetManager manager, String fileName, FileHandle file,
-			AssetLoaderParameters<PdPatch> parameter) {
+			PatchLoader.PdPatchParameter parameter) {
 		patch = Pd.audio.open(file);
-		if(asyncPatches) {
+		if(defaultAsync || parameter != null && parameter.loadAsync) {
 			loadingPatch = patch.getPdHandle();
 			loadingLatch = new CountDownLatch(1);
 			try {
@@ -53,15 +51,19 @@ public class PatchLoader extends AsynchronousAssetLoader<PdPatch, AssetLoaderPar
 
 	@Override
 	public PdPatch loadSync(AssetManager manager, String fileName, FileHandle file,
-			AssetLoaderParameters<PdPatch> parameter) {
+			PatchLoader.PdPatchParameter parameter) {
 		return patch;
 	}
 
 	@Override
 	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
-			AssetLoaderParameters<PdPatch> parameter) {
+			PatchLoader.PdPatchParameter parameter) {
 		// no deps
 		return null;
+	}
+	
+	public static class PdPatchParameter extends AssetLoaderParameters<PdPatch> {
+		public boolean loadAsync;
 	}
 
 }
