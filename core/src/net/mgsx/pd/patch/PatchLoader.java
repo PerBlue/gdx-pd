@@ -8,7 +8,6 @@ import com.badlogic.gdx.assets.*;
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
 import net.mgsx.pd.Pd;
@@ -18,8 +17,7 @@ public class PatchLoader extends AsynchronousAssetLoader<PdPatch, PatchLoader.Pd
 {
 	private PdPatch patch;
 	private boolean defaultAsync;
-	private volatile int loadingPatch;
-	private volatile CountDownLatch loadingLatch;
+	private volatile CountDownLatch loadingLatch;//using a single latch works since patches are loaded 1 at a time
 	
 	public PatchLoader(FileHandleResolver resolver, boolean defaultAsync) {
 		super(resolver);
@@ -27,9 +25,7 @@ public class PatchLoader extends AsynchronousAssetLoader<PdPatch, PatchLoader.Pd
 		Pd.audio.addListener("patchLoaded", new PdListener.Adapter() {
 			@Override
 			public void receiveFloat(String source, float x) {
-				if(MathUtils.isEqual(loadingPatch, x)) {
-					loadingLatch.countDown();
-				}
+				loadingLatch.countDown();
 			}
 		});
 	}
@@ -37,10 +33,12 @@ public class PatchLoader extends AsynchronousAssetLoader<PdPatch, PatchLoader.Pd
 	@Override
 	public void loadAsync(AssetManager manager, String fileName, FileHandle file,
 			PatchLoader.PdPatchParameter parameter) {
-		patch = Pd.audio.open(file);
-		if((parameter == null && defaultAsync) || (parameter != null && parameter.loadAsync)) {
-			loadingPatch = patch.getPdHandle();
+		boolean checkAsync = (parameter == null && defaultAsync) || (parameter != null && parameter.loadAsync);
+		if(checkAsync) {
 			loadingLatch = new CountDownLatch(1);
+		}
+		patch = Pd.audio.open(file);
+		if(checkAsync) {
 			try {
 				loadingLatch.await();
 			} catch (InterruptedException e) {
