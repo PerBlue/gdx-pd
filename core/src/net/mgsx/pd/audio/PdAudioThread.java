@@ -1,5 +1,8 @@
 package net.mgsx.pd.audio;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import org.puredata.core.PdBase;
 
 import com.badlogic.gdx.Gdx;
@@ -20,11 +23,13 @@ public class PdAudioThread extends Thread implements Disposable
 	private volatile boolean processing;
 	private volatile boolean requirePolling = true;
 	protected final PdConfiguration config;
+	private final Executor messageExecutor;
 	
 	public PdAudioThread(PdConfiguration config) {
 		super("PdAudioThread");
 		setPriority(MAX_PRIORITY);
 		this.config = config;
+		messageExecutor = Executors.newSingleThreadExecutor();
 		processing = true;
 	}
 	
@@ -87,7 +92,7 @@ public class PdAudioThread extends Thread implements Disposable
 			
 			if(requirePolling){
 				requirePolling = false;
-				Gdx.app.postRunnable(pollRunnable);
+				messageExecutor.execute(pollRunnable);
 			}
 		}
 		
