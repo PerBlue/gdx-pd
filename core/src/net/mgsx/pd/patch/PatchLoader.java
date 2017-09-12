@@ -38,7 +38,7 @@ public class PatchLoader extends AsynchronousAssetLoader<PdPatch, PatchLoader.Pd
 	public void loadAsync(AssetManager manager, String fileName, FileHandle file,
 			PatchLoader.PdPatchParameter parameter) {
 		patch = Pd.audio.open(file);
-		if(defaultAsync || parameter != null && parameter.loadAsync) {
+		if((parameter == null && defaultAsync) || (parameter != null && parameter.loadAsync)) {
 			loadingPatch = patch.getPdHandle();
 			loadingLatch = new CountDownLatch(1);
 			try {
