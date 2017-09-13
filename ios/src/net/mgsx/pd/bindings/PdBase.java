@@ -57,6 +57,21 @@ public class PdBase extends NSObject {
 	public static native void setDelegate(PdReceiverDelegate newDelegate);
 	
 	/**
+	 * PdBase retains the delegate: call setDelegate with nil in order to release delegate.<br>
+	 * + (void)setDelegate:(NSObject<PdReceiverDelegate> *)newDelegate;
+	 */
+	@Method(selector = "setDelegate:pollingEnabled:")
+	public static native void setDelegate(PdReceiverDelegate newDelegate, boolean pollingEnabled);
+	
+	/**
+	 * Process the message input queue manually.
+	 * Only required if the respective delegate was set with pollingEnabled:NO.
+	 * (void)receiveMessages;
+	 */
+	@Method(selector = "reveiveMessages")
+	public static native void receiveMessages();
+	
+	/**
 	 *  + (void)clearSearchPath;
 	 */
 	@Method(selector = "clearSearchPath")

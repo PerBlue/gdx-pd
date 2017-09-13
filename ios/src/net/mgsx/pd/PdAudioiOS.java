@@ -19,6 +19,7 @@ package net.mgsx.pd;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.*;
 
 import org.puredata.core.PdListener;
 import org.robovm.apple.foundation.*;
@@ -35,21 +36,32 @@ import net.mgsx.pd.patch.PdPatch;
 import net.mgsx.pd.utils.PdRuntimeException;
 
 public class PdAudioiOS extends PdAudioBase {
+	
+	private static final Runnable POLL_RUNNER = new Runnable() {
+		
+		@Override
+		public void run() {
+			PdBase.receiveMessages();
+		}
+	};
 
 	private final Map<PdListener, net.mgsx.pd.bindings.PdListener> listeners = new HashMap<>();
 	private final Map<Integer, VoidPtr> patches = new HashMap<>();
 	
 	private PdAudioController audioController;
 	private PdDispatcher dispatcher;
+	private final ScheduledExecutorService messageExecutor;
+	private ScheduledFuture<?> pollFuture;
 	
 	public PdAudioiOS() {
 		dispatcher = new PdDispatcher();
+		messageExecutor = Executors.newSingleThreadScheduledExecutor();
 	}
 	
 	@Override
 	public void create(PdConfiguration config) {
 		this.config = config;
-		PdBase.setDelegate(dispatcher);
+		PdBase.setDelegate(dispatcher, false);
 		
 		audioController = new PdAudioController();
 		if(config.inputChannels <= 0) {
@@ -61,6 +73,8 @@ public class PdAudioiOS extends PdAudioBase {
 				throw new PdRuntimeException("Failed to initialize audio components!");
 			}
 		}
+		
+		pollFuture = messageExecutor.scheduleWithFixedDelay(POLL_RUNNER, 1, 20, TimeUnit.MILLISECONDS);
 	}
 	
 	@Override
@@ -73,17 +87,26 @@ public class PdAudioiOS extends PdAudioBase {
 		}
 		patches.clear();
 		audioController.dealloc();
+		messageExecutor.shutdown();
 	}
 	
 	@Override
 	public void pause() {
 		audioController.setActive(false);
+		if(pollFuture != null) {
+			pollFuture.cancel(false);
+			pollFuture = null;
+		}
+		messageExecutor.execute(POLL_RUNNER);// Flush pending messages.
 	}
 
 	@Override
 	public void resume() {
 		PdBase.computeAudio(true);
 		audioController.setActive(true);
+		if(pollFuture == null) {
+			pollFuture = messageExecutor.scheduleWithFixedDelay(POLL_RUNNER, 1, 20, TimeUnit.MILLISECONDS);
+		}
 	}
 	
 	@Override
