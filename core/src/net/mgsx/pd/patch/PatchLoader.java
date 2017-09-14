@@ -1,6 +1,7 @@
 package net.mgsx.pd.patch;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.puredata.core.PdListener;
 
@@ -40,7 +41,7 @@ public class PatchLoader extends AsynchronousAssetLoader<PdPatch, PatchLoader.Pd
 		patch = Pd.audio.open(file);
 		if(checkAsync) {
 			try {
-				loadingLatch.await();
+				loadingLatch.await(30, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				throw new PdRuntimeException("Error waiting for patch load", e);
 			}
