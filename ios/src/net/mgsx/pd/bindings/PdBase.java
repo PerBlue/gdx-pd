@@ -68,7 +68,7 @@ public class PdBase extends NSObject {
 	 * Only required if the respective delegate was set with pollingEnabled:NO.
 	 * (void)receiveMessages;
 	 */
-	@Method(selector = "reveiveMessages")
+	@Method(selector = "receiveMessages")
 	public static native void receiveMessages();
 	
 	/**
