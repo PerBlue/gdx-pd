@@ -59,7 +59,9 @@ def pdSources = copySpec {
 				
 				"x_vexp.c", 
 				"x_vexp_if.c", 
-				"x_vexp_fun.c"
+				"x_vexp_fun.c",
+				
+				"zf_log.c"
 	}
 	into "pd-sources"
 }
@@ -276,7 +278,7 @@ task generateBuildScripts(dependsOn: [importSources]){
 	
 		// All platform flags
 		[linux64, linux32, windows64, windows32, macosx64, macosx32, android].each {
-			it.cFlags += " -DLIBPD_EXTRA -DTHREAD_LOCKING=0"
+			it.cFlags += " -DLIBPD_EXTRA -DTHREAD_LOCKING=0 -DZF_LOG_DEF_LEVEL=ZF_LOG_VERBOSE"
 		}
 	
 		// Common flags (all platforms except android)
