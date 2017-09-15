@@ -313,12 +313,12 @@ task generateBuildScripts(dependsOn: [importSources]){
 		}
 		
 		[android].each {
-			it.cFlags += " -DPD -DHAVE_UNISTD_H -DHAVE_LIBDL -DUSEAPI_DUMMY -w -DUSE_PD_MAIN -DANDROID"
+			it.cFlags += " -DPD -DHAVE_UNISTD_H -DHAVE_LIBDL -DUSEAPI_DUMMY -w -DUSE_PD_MAIN -DANDROID -DZF_LOG_USE_ANDROID_LOG=1"
 			it.cFlags += " -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast"
 			it.libraries += " -ldl";
 			it.headerDirs += headerDirs
 			it.headerDirs += ["../../libpd/jni/opensl_stream"]
-			it.linkerFlags += " -lOpenSLES -llog"
+			it.linkerFlags += " -lOpenSLES -llog -latomic"
 			it.cExcludes += ["**/libpdbinding-sources/**/*.*", "**/target/**/*.*"]
 		}
 		
