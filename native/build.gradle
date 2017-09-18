@@ -278,7 +278,7 @@ task generateBuildScripts(dependsOn: [importSources]){
 	
 		// All platform flags
 		[linux64, linux32, windows64, windows32, macosx64, macosx32, android].each {
-			it.cFlags += " -DLIBPD_EXTRA -DTHREAD_LOCKING=0 -DZF_LOG_DEF_LEVEL=ZF_LOG_VERBOSE"
+			it.cFlags += " -DLIBPD_EXTRA -DTHREAD_LOCKING=0 -DZF_LOG_DEF_LEVEL=ZF_LOG_INFO"
 		}
 	
 		// Common flags (all platforms except android)
