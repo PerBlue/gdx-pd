@@ -181,7 +181,7 @@ public class PdAudioiOS extends PdAudioBase {
 	 * It seems that in case of errors, no exceptions are thrown nor return values are returned.<br>
 	 */
 	private NSArray<?> convertToArray(Object... args) {
-		NSArray<NSObject> list = new NSArray<NSObject>();
+		NSMutableArray<NSObject> list = new NSMutableArray<NSObject>();
 		for(Object obj : args) {
 			if(obj instanceof Integer)
 				list.add( NSNumber.valueOf( ((Integer)obj).intValue() ) );
