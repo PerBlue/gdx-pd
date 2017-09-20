@@ -307,7 +307,7 @@ task generateBuildScripts(dependsOn: [importSources]){
 		}
 		
 		[windows64, windows32].each {
-			it.cFlags += " -DWINVER=0x502 -DWIN32 -D_WIN32 -DPD_INTERNAL -DMSW";
+			it.cFlags += " -DWINVER=0x502 -DWIN32 -D_WIN32 -DPD_INTERNAL -DMSW -g";
 			it.libraries += " -shared -Wl,--export-all-symbols -lws2_32 -lkernel32" // MINGW
 			it.libraries += " -Wl,--kill-at" // linker
 		}
